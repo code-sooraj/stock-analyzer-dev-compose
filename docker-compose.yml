@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  sa-main-service:
+    container_name: sa-main-container
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    expose:
+    - 8080
+    image: conserwit.com/stock-analyzer/sa-main-service:dev
+    env_file:
+    - ./.env
+    ports:
+    - 8001:8080
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url"  : "$SQLDB_JDBC_URL",
+        "spring.datasource.driver-class-name" : "$SQLDB_DRIVER_CLASS_NAME",
+        "spring.profiles.active" : "$SPRING_PROFILES_ACTIVE"
+      }'
+    stdin_open: true
+    tty: true
+    labels:
+      generated: by conserwit.com
